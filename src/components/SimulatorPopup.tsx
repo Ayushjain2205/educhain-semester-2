@@ -23,7 +23,6 @@ export default function SimulatorPopup({
   aiName,
   firstMessage,
   personality,
-  avatarUrl,
 }: SimulatorPopupProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -37,7 +36,6 @@ export default function SimulatorPopup({
           aiName={aiName}
           firstMessage={firstMessage}
           personality={personality}
-          avatarUrl={avatarUrl}
         />
       </DialogContent>
     </Dialog>
