@@ -151,8 +151,8 @@ export default function AdvancedForm({
         </h2>
         <RadioGroup
           defaultValue="normal"
-          value={formData.launchType}
-          onValueChange={(value) =>
+          value={formData.launchType as string}
+          onValueChange={(value: string) =>
             setFormData((prev: FormData) => ({ ...prev, launchType: value }))
           }
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -296,8 +296,8 @@ export default function AdvancedForm({
         </h2>
         <RadioGroup
           defaultValue="eliza"
-          value={formData.framework}
-          onValueChange={(value) =>
+          value={formData.framework as "eliza" | "goat" | "zerepy"}
+          onValueChange={(value: "eliza" | "goat" | "zerepy") =>
             setFormData((prev: FormData) => ({ ...prev, framework: value }))
           }
           className="grid grid-cols-1 md:grid-cols-3 gap-4"

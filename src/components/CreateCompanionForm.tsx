@@ -65,7 +65,7 @@ export default function CreateCompanionForm() {
     type: "Finance",
     image: null,
     telegramBotName: "PepeScoutBot",
-    telegramToken: "",
+    telegramToken: "xasdcasdcwwevlavadhsdpfomvad",
     specialties: ["Crypto", "Meme Coins", "Social Sentiment"],
     knowledgeFiles: [],
     knowledgeLinks: [
