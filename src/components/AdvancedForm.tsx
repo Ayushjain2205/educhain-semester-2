@@ -794,7 +794,7 @@ export default function AdvancedForm({
           onClick={() => setIsSimulatorOpen(true)}
           className="bg-[#3BF4FB] text-[#10002B] px-8 py-3 rounded-lg font-space-grotesk font-bold hover:bg-[#44318D] hover:text-[#E0AAFF] transition-colors"
         >
-          Test AI Companion
+          Test AI Agent
         </Button>
       </div>
       <SimulatorPopup

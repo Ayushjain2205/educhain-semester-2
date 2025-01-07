@@ -2,11 +2,22 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConnectButton } from "thirdweb/react";
+import { defineChain } from "thirdweb/chains";
 import { client } from "@/lib/client";
-import { bscTestnet } from "thirdweb/chains";
 
 const Navbar = () => {
   const router = useRouter();
+
+  const chain = defineChain({
+    id: 656476,
+    name: "Open Campus Codex",
+    rpc: "https://rpc.open-campus-codex.gelato.digital",
+    nativeCurrency: {
+      name: "EDU ",
+      symbol: "EDU",
+      decimals: 18,
+    },
+  });
 
   return (
     <nav className="bg-[#10002B] text-[#E0AAFF] p-4">
@@ -45,7 +56,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex-1 flex justify-end">
-          <ConnectButton client={client} chain={bscTestnet} theme={"light"} />
+          <ConnectButton client={client} chain={chain} theme={"light"} />
         </div>
       </div>
     </nav>
