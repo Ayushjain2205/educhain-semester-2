@@ -42,7 +42,7 @@ const agents: Agent[] = [
     address: "0x2345678901234567890123456789012345678901",
     ticker: "$FRENCH",
     value: 0.85,
-    botUsername: "frenchtutor_bot",
+    botUsername: "Frenchtutorsage_bot",
   },
   {
     id: 3,

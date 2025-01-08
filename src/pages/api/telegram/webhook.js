@@ -2,6 +2,22 @@
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
+const userBalances = new Map();
+const userStreaks = new Map();
+
+async function updateUserBalance(chatId, amount) {
+  const currentBalance = userBalances.get(chatId) || 0;
+  const newBalance = currentBalance + amount;
+  userBalances.set(chatId, newBalance);
+  return newBalance;
+}
+
+async function updateUserStreak(chatId) {
+  const currentStreak = userStreaks.get(chatId) || 0;
+  userStreaks.set(chatId, currentStreak + 1);
+  return currentStreak + 1;
+}
+
 async function sendMessage(chatId, text, keyboard = null) {
   const payload = {
     chat_id: chatId,
@@ -21,129 +37,155 @@ async function sendMessage(chatId, text, keyboard = null) {
 async function simulateConversation(chatId, trigger) {
   switch (trigger) {
     case "/start":
+      const currentBalance = userBalances.get(chatId) || 0;
       await sendMessage(
         chatId,
-        "🧙‍♂️ Welcome to DeFi Sage! Your trusted advisor for crypto insights and alerts."
+        `🔬 Welcome to ScienceGuide!\n\n` +
+          `Your current balance: ${currentBalance} $SCIENCE\n\n` +
+          `Let's explore the wonders of science together!`
       );
-      await sendMessage(chatId, "What wisdom do you seek today?", [
-        [{ text: "🔥 Hot DeFi Projects", callback_data: "defi_hot" }],
-        [{ text: "🚨 Set Price Alerts", callback_data: "price_alerts" }],
-        [{ text: "📈 Market Analysis", callback_data: "market_analysis" }],
-        [{ text: "🐕 Meme Coins", callback_data: "meme_trending" }],
+      await sendMessage(chatId, "Choose your scientific adventure:", [
+        [{ text: "🌌 Daily Discovery", callback_data: "daily_discovery" }],
+        [{ text: "⚡ Quick Experiment", callback_data: "experiment" }],
+        [{ text: "🧪 Science Fact", callback_data: "daily_fact" }],
+        [{ text: "🔍 Quiz Time", callback_data: "quiz" }],
+        [{ text: "🎓 Knowledge Points", callback_data: "check_balance" }],
       ]);
       break;
 
-    case "price_alerts":
+    case "daily_discovery":
       await sendMessage(
         chatId,
-        "⚡️ Current Active Alerts:\n\n" +
-          "1. ETH < $3,000 ⬇️\n" +
-          "2. BTC > $52,000 ⬆️\n" +
-          "3. PEPE < $0.000001 ⬇️\n\n" +
-          "Select alert type:",
+        "🌌 Today's Discovery: Black Holes\n\n" +
+          "Let's explore one of the universe's most mysterious phenomena!\n\n" +
+          "Progress: ▮▮▮▮▯ 4/5 concepts"
+      );
+      await sendMessage(
+        chatId,
+        "Key Concepts:\n\n" +
+          "1. Event Horizon 🌑\n" +
+          "The point of no return - not even light can escape!\n\n" +
+          "2. Singularity 🎯\n" +
+          "The infinitely dense center of a black hole\n\n" +
+          "3. Hawking Radiation ✨\n" +
+          "Black holes aren't completely black after all!",
         [
-          [
-            { text: "⬆️ Above Price", callback_data: "alert_above" },
-            { text: "⬇️ Below Price", callback_data: "alert_below" },
-          ],
-          [
-            { text: "📊 View Alerts", callback_data: "view_alerts" },
-            { text: "❌ Clear Alerts", callback_data: "clear_alerts" },
-          ],
+          [{ text: "▶️ Start Learning", callback_data: "lesson_start" }],
+          [{ text: "🔄 Main Menu", callback_data: "/start" }],
         ]
       );
       break;
 
-    case "alert_above":
+    case "lesson_start":
       await sendMessage(
         chatId,
-        "📈 Popular tokens to track:\n\n" +
-          "• BTC ($48,250)\n" +
-          "• ETH ($2,850)\n" +
-          "• SOL ($98.5)\n" +
-          "• PEPE ($0.0000009)\n\n" +
-          "Send token and price like:\n" +
-          "<code>BTC 50000</code>"
-      );
-      break;
-
-    case "alert_below":
-      await sendMessage(
-        chatId,
-        "📉 Support levels to watch:\n\n" +
-          "• BTC ($47,500)\n" +
-          "• ETH ($2,800)\n" +
-          "• SOL ($95.0)\n" +
-          "• PEPE ($0.0000008)\n\n" +
-          "Send token and price like:\n" +
-          "<code>ETH 2800</code>"
-      );
-      break;
-
-    case "market_analysis":
-      await sendMessage(
-        chatId,
-        "🧙‍♂️ DeFi Sage's Market Vision:\n\n" +
-          "🌍 Market Overview:\n" +
-          "• Market Sentiment: Bullish\n" +
-          "• 24h Volume: $52B (+8%)\n" +
-          "• BTC Dominance: 51%\n\n" +
-          "⚠️ Critical Levels:\n" +
-          "BTC: $47,500 Support | $49,800 Resist\n" +
-          "ETH: $2,800 Support | $3,100 Resist\n\n" +
-          "🔥 Trending:\n" +
-          "1. L2s (+18% 24h)\n" +
-          "2. Gaming (+15% 24h)\n" +
-          "3. Meme (+12% 24h)"
-      );
-      await sendMessage(chatId, "Want to set price alerts for these levels?", [
-        [{ text: "🚨 Set Alert", callback_data: "price_alerts" }],
-        [{ text: "🔄 Refresh Analysis", callback_data: "market_analysis" }],
-      ]);
-      break;
-
-    case "defi_hot":
-      await sendMessage(chatId, "Choose your path of enlightenment:", [
+        "🤔 Question 1:\n\n" +
+          "What happens at the event horizon of a black hole?",
         [
-          { text: "💸 Yield Farms", callback_data: "defi_yield" },
-          { text: "🔄 DEX", callback_data: "defi_dex" },
-        ],
-        [
-          { text: "🏦 Lending", callback_data: "defi_lending" },
-          { text: "🎮 GameFi", callback_data: "defi_gamefi" },
-        ],
-        [{ text: "🚨 Price Alerts", callback_data: "price_alerts" }],
-      ]);
-      break;
-
-    case "meme_trending":
-      await sendMessage(
-        chatId,
-        "🧙‍♂️ The Sage's Meme Watchlist:\n\n" +
-          "1. 🐸 PEPE\n" +
-          "• Price: $0.0000009\n" +
-          "• 24h: +15%\n" +
-          "• Alert: Set at $0.000001 ⬆️\n\n" +
-          "2. 🤖 WOJAK\n" +
-          "• Price: $0.0004\n" +
-          "• 24h: +8%\n" +
-          "• Volume: $2.5M\n\n" +
-          "3. 🦊 SHIB\n" +
-          "• Price: $0.00001\n" +
-          "• 24h: +5%\n" +
-          "• Volume: $150M"
-      );
-      await sendMessage(
-        chatId,
-        "⚠️ The Sage advises: Meme coins are highly volatile!",
-        [
-          [{ text: "🚨 Set Alert", callback_data: "price_alerts" }],
-          [{ text: "🔄 Refresh Prices", callback_data: "meme_trending" }],
+          [{ text: "Nothing can escape", callback_data: "answer_correct" }],
+          [{ text: "Everything explodes", callback_data: "answer_wrong" }],
+          [{ text: "Time stops completely", callback_data: "answer_partial" }],
         ]
       );
       break;
 
-    // Handle other cases from previous implementation...
+    case "answer_correct":
+      const lessonReward = 5;
+      const newBalanceAfterLesson = await updateUserBalance(
+        chatId,
+        lessonReward
+      );
+      const streak = await updateUserStreak(chatId);
+
+      let streakBonus = 0;
+      if (streak % 5 === 0) {
+        streakBonus = 2;
+        await updateUserBalance(chatId, streakBonus);
+      }
+
+      await sendMessage(
+        chatId,
+        `🎉 Brilliant! That's correct!\n\n` +
+          `🧪 Rewards:\n` +
+          `• Discovery Progress: +${lessonReward} $SCIENCE\n` +
+          `${streakBonus ? `• Streak Bonus: +${streakBonus} $SCIENCE\n` : ""}` +
+          `• Current Balance: ${newBalanceAfterLesson} $SCIENCE\n\n` +
+          `📚 Learning Streak: ${streak} days\n\n` +
+          `💡 Fun Fact: The event horizon is like a cosmic point of no return - once anything crosses it, it can never escape the black hole's gravitational pull!`,
+        [
+          [{ text: "➡️ Next Question", callback_data: "question_2" }],
+          [{ text: "📊 View Progress", callback_data: "check_balance" }],
+        ]
+      );
+      break;
+
+    case "daily_fact":
+      const factReward = 3;
+      const factBalance = await updateUserBalance(chatId, factReward);
+
+      await sendMessage(
+        chatId,
+        "🧪 Today's Science Fact:\n\n" +
+          "Did you know? DNA is like a twisted ladder that could stretch from Earth to the Sun and back 600 times if you uncoiled all the DNA in your body!\n\n" +
+          `🎓 Reward: +${factReward} $SCIENCE\n` +
+          `Current Balance: ${factBalance} $SCIENCE`,
+        [
+          [{ text: "🔬 Learn More", callback_data: "daily_discovery" }],
+          [{ text: "🎯 Take Quiz", callback_data: "quiz" }],
+        ]
+      );
+      break;
+
+    case "check_balance":
+      const balance = userBalances.get(chatId) || 0;
+      const currentStreak = userStreaks.get(chatId) || 0;
+
+      await sendMessage(
+        chatId,
+        "🎓 Your Science Progress:\n\n" +
+          `Current Balance: ${balance} $SCIENCE\n\n` +
+          `🔬 Learning Streak: ${currentStreak} days\n\n` +
+          "Earn more by:\n" +
+          "• Complete discovery: +10 $SCIENCE\n" +
+          "• Do experiment: +5 $SCIENCE\n" +
+          "• Learn fact: +3 $SCIENCE\n" +
+          "• Take quiz: +2 $SCIENCE\n" +
+          "• 5-day streak bonus: +2 $SCIENCE\n\n" +
+          "🏆 Achievements:\n" +
+          "• Quantum Explorer 🌌\n" +
+          "• Lab Master 🧪\n" +
+          "• Science Enthusiast 🔬",
+        [
+          [{ text: "🌌 New Discovery", callback_data: "daily_discovery" }],
+          [{ text: "🔄 Main Menu", callback_data: "/start" }],
+        ]
+      );
+      break;
+
+    case "experiment":
+      await sendMessage(
+        chatId,
+        "⚡ Quick Experiment: Static Electricity\n\n" +
+          "Materials needed:\n" +
+          "• Balloon 🎈\n" +
+          "• Your hair (or wool cloth)\n\n" +
+          "Steps:\n" +
+          "1. Inflate the balloon\n" +
+          "2. Rub it on your hair\n" +
+          "3. Hold it near small paper pieces\n\n" +
+          "What do you observe?",
+        [
+          [
+            {
+              text: "Paper attracts to balloon",
+              callback_data: "experiment_correct",
+            },
+          ],
+          [{ text: "Nothing happens", callback_data: "experiment_wrong" }],
+          [{ text: "Balloon pops", callback_data: "experiment_wrong" }],
+        ]
+      );
+      break;
   }
 }
 
@@ -178,21 +220,6 @@ export default async function handler(req, res) {
 
       if (message.text === "/start") {
         await simulateConversation(chatId, "/start");
-      }
-
-      // Handle price alert settings
-      if (message.text && message.text.includes(" ")) {
-        const [token, price] = message.text.split(" ");
-        if (!isNaN(price)) {
-          await sendMessage(
-            chatId,
-            `🚨 Alert set!\n\n` +
-              `Token: ${token.toUpperCase()}\n` +
-              `Target: $${price}\n\n` +
-              `I'll notify you when the price crosses this level.`,
-            [[{ text: "🔄 Set Another Alert", callback_data: "price_alerts" }]]
-          );
-        }
       }
     }
 
