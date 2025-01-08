@@ -21,6 +21,7 @@ interface AdvancedFormProps {
   COMPANION_TYPES: string[];
   SPECIALTIES: string[];
   ADJECTIVES: string[];
+  setIsTesting: (testing: boolean) => void;
 }
 
 const ACTION_CAPABILITIES = [
@@ -45,6 +46,7 @@ export default function AdvancedForm({
   COMPANION_TYPES,
   SPECIALTIES,
   ADJECTIVES,
+  setIsTesting,
 }: AdvancedFormProps) {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customSpecialty, setCustomSpecialty] = useState("");
@@ -791,7 +793,11 @@ export default function AdvancedForm({
 
       <div className="flex justify-center mt-8">
         <Button
-          onClick={() => setIsSimulatorOpen(true)}
+          type="button"
+          onClick={() => {
+            setIsTesting(true);
+            setIsSimulatorOpen(true);
+          }}
           className="bg-[#3BF4FB] text-[#10002B] px-8 py-3 rounded-lg font-space-grotesk font-bold hover:bg-[#44318D] hover:text-[#E0AAFF] transition-colors"
         >
           Test AI Agent
@@ -799,7 +805,10 @@ export default function AdvancedForm({
       </div>
       <SimulatorPopup
         isOpen={isSimulatorOpen}
-        onClose={() => setIsSimulatorOpen(false)}
+        onClose={() => {
+          setIsSimulatorOpen(false);
+          setIsTesting(false);
+        }}
         aiName={formData.name || "AI Companion"}
         firstMessage={
           formData.firstMessage || "Hello! How can I assist you today?"

@@ -111,11 +111,14 @@ export default function CreateCompanionForm() {
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting form data:", formData);
-    setIsCreating(true);
+    if (!isTesting) {
+      console.log("Submitting form data:", formData);
+      setIsCreating(true);
+    }
   };
 
   const handleInputChange = (
@@ -171,6 +174,7 @@ export default function CreateCompanionForm() {
             COMPANION_TYPES={COMPANION_TYPES}
             SPECIALTIES={SPECIALTIES}
             ADJECTIVES={ADJECTIVES}
+            setIsTesting={setIsTesting}
           />
         ) : (
           <BasicForm
