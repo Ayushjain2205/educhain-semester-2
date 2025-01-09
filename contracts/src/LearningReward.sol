@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract LearningRewards is Ownable, ReentrancyGuard {
+contract LearningRewards is Ownable(msg.sender) {
     IERC20 public sageToken;
 
     struct Achievement {
         string name;
         string category;
         uint256 rewardAmount;
-        uint256 requiredProof; // e.g., test score, completion time
+        uint256 requiredProof;
     }
 
     struct StudentProgress {
@@ -80,7 +79,7 @@ contract LearningRewards is Ownable, ReentrancyGuard {
         address _student,
         uint256 _achievementId,
         uint256 _proof
-    ) external onlyAuthorizedAgent nonReentrant {
+    ) external onlyAuthorizedAgent {
         Achievement memory achievement = achievements[_achievementId];
         require(
             _proof >= achievement.requiredProof,

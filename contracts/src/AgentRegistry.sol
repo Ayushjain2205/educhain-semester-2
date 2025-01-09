@@ -1,22 +1,21 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract AgentRegistry is Ownable, ReentrancyGuard {
+contract AgentRegistry is Ownable(msg.sender) {
     IERC20 public sageToken;
 
     struct Agent {
         string name;
-        string category; // e.g., "Mathematics", "Language", etc.
+        string category;
         address creator;
-        uint256 price; // Price in SAGE tokens
+        uint256 price;
         string[] specialties;
         bool isActive;
         uint256 studentsCount;
-        uint256 rating; // Out of 1000 (e.g., 950 = 4.75/5)
+        uint256 rating;
     }
 
     mapping(uint256 => Agent) public agents;
@@ -24,7 +23,7 @@ contract AgentRegistry is Ownable, ReentrancyGuard {
     mapping(address => uint256[]) public studentSubscriptions;
 
     uint256 public nextAgentId = 1;
-    uint256 public registrationFee = 100 * 10 ** 18; // 100 SAGE tokens
+    uint256 public registrationFee = 100 * 10 ** 18;
 
     event AgentRegistered(
         uint256 indexed agentId,
@@ -47,7 +46,7 @@ contract AgentRegistry is Ownable, ReentrancyGuard {
         string memory _category,
         uint256 _price,
         string[] memory _specialties
-    ) external nonReentrant {
+    ) external {
         require(
             sageToken.transferFrom(msg.sender, address(this), registrationFee),
             "Fee transfer failed"
@@ -69,7 +68,7 @@ contract AgentRegistry is Ownable, ReentrancyGuard {
         nextAgentId++;
     }
 
-    function subscribeToAgent(uint256 _agentId) external nonReentrant {
+    function subscribeToAgent(uint256 _agentId) external {
         require(agents[_agentId].isActive, "Agent not active");
         require(
             sageToken.transferFrom(
@@ -97,7 +96,7 @@ contract AgentRegistry is Ownable, ReentrancyGuard {
         require(isSubscribed, "Not subscribed to agent");
 
         Agent storage agent = agents[_agentId];
-        agent.rating = (_rating + agent.rating) / 2; // Simple average
+        agent.rating = (_rating + agent.rating) / 2;
         emit AgentRated(_agentId, msg.sender, _rating);
     }
 

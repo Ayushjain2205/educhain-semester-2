@@ -1,0 +1,9 @@
+{
+  "chainId": 656476,
+  "contracts": {
+    "SageToken": "0x0882CAc0fBe26ACA9fdED8a88A6f6c2043609D6C",
+    "AgentRegistry": "0xab8CF91658009e0Eb123c60bCe2120A7E13C9ff2",
+    "LearningRewards": "0xbc71aDFcD89E9Feffb867839f94B59D19921260C"
+  },
+  "timestamp": "2025-01-09T10:51:06.636Z"
+}

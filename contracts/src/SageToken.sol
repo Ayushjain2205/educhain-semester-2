@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract SageToken is ERC20, Ownable, ReentrancyGuard {
+contract SageToken is ERC20("SageSpace Token", "SAGE"), Ownable(msg.sender) {
     uint256 public constant INITIAL_SUPPLY = 100_000_000 * 10 ** 18; // 100M tokens
 
     // Token distribution
@@ -20,7 +19,7 @@ contract SageToken is ERC20, Ownable, ReentrancyGuard {
     event TeacherRegistered(address indexed teacher);
     event TeacherReputationUpdated(address indexed teacher, uint256 newScore);
 
-    constructor() ERC20("SageSpace Token", "SAGE") {
+    constructor() {
         _mint(msg.sender, INITIAL_SUPPLY);
     }
 
